@@ -1,0 +1,877 @@
+\documentclass[oribibl]{llncs}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{caption}
+\renewcommand{\figurename}{Fig.}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{placeins}
+\usepackage{morefloats}
+\usepackage{authblk}
+\usepackage{url}
+\urldef{\mailsa}\path|pawan@cs.smu.ca, |
+\urldef{\mailsb}\path|matt.triff@gmail.com |
+\setlength{\textfloatsep}{5pt}
+%\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+%\noindent\keywordname\enspace\ignorespaces#1}
+\providecommand{\keywords}[1]{\textbf{{Keywords:}} #1}
+\begin{document}
+%\mainmatter  % start of an individual contribution
+\titlepage
+% first the title is needed
+\title{Advances in Rough and Soft Clustering: Meta-Clustering, Dynamic Clustering, Data-Stream Clustering}
+
+%%%% a short form should be given in case it is too long for the running head
+% the name(s) of the author(s) follow(s) next
+%
+%%%% NB: Chinese authors should write their first names(s) in front of
+%%%% their surnames. This ensures that the names appear correctly in
+%%%% the running heads and the author index.
+%
+\author{Pawan Lingras and Matt Triff}
+%%%\thanks{Please note that the LNCS Editorial assumes that all authors have used
+%%%the western naming convention, with given names preceding surnames. This determines
+%%%the structure of the names in the running heads and the author index.}%
+%%%%Anna Kramer\and Leonie Kunz\and Christine Rei\ss\and\\
+%%%%Nicole Sator\and Erika Siebert-Cole\and Peter Stra\ss er}
+%%%%
+%\authorrunning{Lingras,Haider}
+%%% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{Mathematics and Computing Science, Saint Mary\'s  University, Halifax, Canada\\
+pawan@cs.smu.ca, matt.triff@gmail.com}
+%\date{}
+%%%%\url{http://www.springer.com/lncs}}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+%\toctitle{Lecture Notes in Computer Science}
+%\tocauthor{Authors' Instructions}
+\maketitle
+
+
+\begin{abstract}
+Over the last five decades, clustering has established itself as a primary unsupervised learning technique. In most major data mining projects clustering can serve as a first step in understanding the available data. Clustering is used for creating meaningful profiles of entities in an application. It can also be used to compress the dataset into more manageable granules. The initial methods of crisp clustering objects represented using numeric attributes have evolved to address the demands of the real-world. These extensions include the use of soft computing techniques such as fuzzy and rough set theory, the use of centroids and medoids for computational efficiency, modes to accommodate categorical attributes, dynamic and stream clustering for managing continuous accumulation of data, and meta-clustering for correlating parallel clustering processes. This paper uses applications in engineering, web usage, retail, finance, and social networks to illustrate some of the recent advances in clustering and their role in improved profiling, as well as augmenting prediction, classification, association mining, dimensionality reduction, and optimization tasks.
+\end{abstract}
+
+
+
+\keywords{
+Clustering, Rough Sets, Fuzzy sets, Finance, Retail, Social networks, Web usage, Engineering, Meta-clustering, Dynamic Clustering
+}
+
+\section{Introduction}
+
+Clustering is one of the most versatile data mining techniques. Since it is an unsupervised learning technique, it can be part of the initial pattern analysis in a dataset. Clustering can also be used at different stages of a knowledge discovery process. The objective of this paper is to use real world applications in domains ranging from retail, mobile/social networks, finance, web usage, and engineering to demonstrate how clustering can play an important role in data mining. Researchers have proposed a number of extensions to the original crisp clustering techniques. The applications described in this paper describe how these extensions improve the unsupervised learning process in the real-world.
+
+The paper first illustrates how the available raw data with limited input from domain experts can initiate a knowledge discovery process. We will see why the initial  crisp clustering algorithms are not able to model clustering in real-world applications. Fuzzy and rough set theories are shown to provide better alternatives for some of the real-world applications. Fuzzy clustering provides a degree of membership to the clusters, but does not provide obvious boundaries between clusters. Rough clustering can provide a happy medium between the fuzzy and crisp clustering. Rough clustering can also complement fuzzy clustering to provide descriptive memberships and identifiable rough boundaries of clusters. The paper also describes how one can derive well delineated rough clusters from a fuzzy clustering scheme.
+
+Clustering technology continues to evolve to respond to new challenges. We will discuss an emerging area of meta-clustering that use hierarchical, network, and temporal relationships between objects for parallel clustering processes that feed knowledge to each other, creating semantically enhanced meta-clustering schemes. We will briefly review dynamic, incremental, and decremental clustering algorithms the have been developed to address continuous accumulation of data. These techniques reorganize the clustering schemes by adding new clusters, deleting obsolete clusters, and merging clusters that start to converge. The discussion will also include the need for efficient handling of high velocity data-streams. The versatility of clustering is further demonstrated by showing its usage for improving the quality of other data mining techniques. For example, grouping similar patterns can improve the quality of prediction techniques. Clustering can also be used to summarize the results of other data mining techniques, such as evolutionary optimization. Finally, we will discuss how clustering can provide an alternative, or supplementary, classification or association mining technique. The objective of the paper is not to provide a comprehensive review of clustering research, but to demonstrate its pivotal role in real-world data mining applications.
+
+\section{Crisp clustering}
+In this section, we will look at a web usage mining application of a popular clustering algorithm called k-means~\cite{HartiganWong1979}.
+The k-means algorithm identifies the centroids (means) of the clusters in a dataset. It begins with random centroids. Objects are assigned to the closest centroid. The centroid of the objects assigned to different clusters is recalculated. The process continues until the centroids converge.
+
+Yelp.com is an online review and recommendation community.  
+Yelp was founded in 2004, is available in 32 countries worldwide, and currently has over 100 million unique monthly visitors.  Yelp provides value to consumers by allowing users to research written reviews, ratings, business details such as business hours and whether or not a business has free WiFi, as well as pictures posted by other users of the business and its products.  Yelp also provides a social platform for its users, allowing them to create events, lists of recommended businesses to share and comment on, and to message and become friends with other users.
+
+In Spring 2013, Yelp released a large set of data, covering the entire Phoenix Metropolitan Area (PMA) as part of the Yelp Dataset Challenge.  The Yelp Dataset Challenge was open-ended and aimed at finding innovative uses for the data Yelp collects.  Yelp posed potential questions to answer, such as "What time of day is a restaurant busy, based on its reviews?", "What makes a review funny or cool?", "Which business is likely to be reviewed next by a user?", and more.  Yelp encouraged the submission in any form that entrants felt conveyed the appeal of their project, which would later be judged for one of ten cash prizes.
+The data covering the PMA came as four separate files, one each for businesses, check-ins, users, and reviews.  Business information includes each businesses unique ID, name, neighborhoods that they are located within, full localized address, city, state, latitude, longitude, average star rating out of five (rounded to half stars) from reviewers, categories, and a variable set for whether or not the business is still active.  Reviews contained the business ID of the business being reviewed, the ID of the reviewer writing the review, the number of stars the reviewer gave the business out of five (rounded to the half star), the text of the written review, the date the review was given, and the number of votes other users have given the review, in the categories of "Funny", "Cool" and "Useful".  Reviewer data contained the unique user ID, first name, number of reviews they have given, average stars rated (as a floating point average of all the reviews they have made), and the total number of votes their reviews have received for the three categories previously mentioned.  Finally, check-in data contained information of which business the check-in data related to, and the total number of people who had checked-in to the business on the mobile Yelp app or webpage for each hour of each day of the week (168 categories, or 24 categories for each day of the week).
+
+As a first data mining activity, we can group the reviewers and businesses based on the number of reviews from different categories (*, **, ***, ****, *****), 
+as well as votes received by the reviewer. Representing the objects in the dataset is one of the most important aspects of clustering.
+A reviewer is represented by $\vec{sr}_j =  (total, *,**,***,****,*****,votes)$,
+where total is the number of reviews, * is the number of one star reviews, ** means the number of two star reviews, and so on.
+A business is represented  by $\vec{sb}_i = (total, *,**,***,****,*****)$. Note that there are no votes in the representation of a business.
+
+\begin{table*}[h]
+	\caption{Centroids from crisp  clustering of business data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.1cm}
+%\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+ Cluster ID&Total  & *&**&***&****&*****&Size\\
+  \hline
+$\vec{sbc_1}$&5.75&4.99&2.18&2.74&3.92&86.14&2073\\
+\hline
+$\vec{sbc_2}$&5.29&55.80&11.44&7.80&11.13&13.82&1221\\
+\hline
+$\vec{sbc_3}$&11.10&6.45&7.10&11.70&59.22&15.50&2212\\
+\hline
+$\vec{sbc_4}$&12.42&12.61&20.05&34.21&22.61&10.50&2301\\
+\hline
+$\vec{sbc_5}$&13.64&7.04&5.83&9.24&31.04&46.83&2782\\
+\hline
+$\vec{sbc_6}$&101.39&5.92&9.43&16.04&37.45&31.13&844\\
+\hline
+$\vec{sbc_7}$&334.85&3.18&6.43&13.64&38.59&38.13&104\\
+\hline
+\end{tabular}}
+\label{tab:crispBusinessStaticCentroids} 
+\end{table*}
+
+Table~\ref{tab:crispBusinessStaticCentroids} shows the results of crisp clustering applied to the information about the businesses.
+We can describe the resulting profiles of business clusters as:
+\begin{itemize}
+\item [$\vec{sbc}_1$] {\bf Sparsely but very well rated} - Fewest number of reviews, mostly five stars.
+\item [$\vec{sbc}_2$] {\bf Sparsely and lowly rated} - Fewest number of reviews, mostly one and two stars.
+\item [$\vec{sbc}_3$] {\bf Well rated} - Modest number of reviews, mostly five and four stars.
+\item [$\vec{sbc}_4$] {\bf Ambivalently rated} - Modest number of evenly spread reviews.
+\item [$\vec{sbc}_5$] {\bf Reasonably rated} - Modest number of reviews, mostly four and five stars.
+\item [$\vec{sbc}_6$] {\bf Well rated} - Large number of reviews, mostly  four and five stars with noticeable three stars.
+\item [$\vec{sbc}_7$] {\bf Reasonably rated} - Largest number of reviews, mostly  four and five stars with noticeable three stars.
+\end{itemize}
+
+\begin{table*}[h]
+	\caption{Centroids from crisp clustering of reviewer data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.1cm}
+%\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Cluster ID&Total&*&**&***&****&*****&votes& Size\\
+\hline
+$\vec{src_2}$&1.60&87.33&0.69&2.29&0.85&8.82&2.39&5154\\
+\hline
+$\vec{src_5}$&2.47&1.55&1.22&3.06&3.65&90.50&3.06&16569\\
+\hline
+$\vec{src_6}$&2.94&5.64&65.53&6.94&10.10&11.77&4.18&4581\\
+\hline
+$\vec{src_4}$&4.75&3.43&2.70&8.49&69.60&15.75&6.26&14321\\
+\hline
+$\vec{src_3}$&22.19&2.63&4.34&63.06&17.01&12.94&85.01&3171\\
+\hline
+$\vec{src_1}$&183.04&4.50&9.43&23.14&39.48&23.41&2278.42&75\\
+\hline
+$\vec{src_6}$&442.5&2.27&5.65&26.29&46.04&19.73&13073.5&2\\
+\hline
+\end{tabular}}
+\label{tab:crispReviewerStaticCentroids} 
+\end{table*}
+
+
+Table~\ref{tab:crispReviewerStaticCentroids} shows the results of crisp clustering applied to the information about the reviewers.
+We can describe the resulting profiles of reviewer clusters as:
+
+\begin{itemize}
+\item [$\vec{src}_1$] {\bf Infrequent and hard} -Very few and mostly one and two star reviews. 
+\item [$\vec{src}_2$]{\bf Infrequent and soft} - Very few and mostly five and four star reviews. 
+\item [$\vec{src}_3$] {\bf Infrequent and very soft} - Very few and almost exclusively five star reviews.
+\item [$\vec{src}_4$] {\bf Infrequent and balanced} - Very few and mostly five star reviews, with noticeable two and three stars reviews as well.
+\item [$\vec{src}_5$] {\bf Somewhat prolific and balanced} - Modest number of reviews and votes, mostly four, five, and three stars.
+\item [$\vec{src}_6$] {\bf Prolific and balanced} - Large number of reviews and votes are mostly four, three, and five stars. 
+\item [$\vec{src}_7$] {\bf Extremely prolific and balanced} This group of two is essentially an outlier with a large number of reviews and votes, and these users should be treated separately as prolific reviewers.  
+\end{itemize}
+More details of the experiments can be found in~\cite{LingrasTriff2015}.
+
+\section{Fuzzy Clustering}
+
+Conventional clustering assigns various objects to precisely one
+cluster. A fuzzy generalization of the clustering, Fuzzy C-means,
+uses a fuzzy membership
+function to describe the degree of membership (ranging from 0 to 1) of an
+object to a given cluster. There is a stipulation that the sum of fuzzy
+memberships of an object to all the clusters must be equal to 1.
+The algorithm was first proposed by Dunn in 1973 \cite{Dunn1973}.
+
+\begin{table*}[h]
+	\caption{Centroids from fuzzy clustering of business data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.1cm}
+%\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+ Cluster ID&Total  & *&**&***&****&*****&Size\\
+  \hline
+$\vec{sbcf_1}$&5.47&1.83&0.92&1.13&2.36&93.73&1799\\
+\hline
+$\vec{sbcf_2}$&8.77&36.66&14.52&16.19&17.77&14.84&1948\\
+\hline
+$\vec{sbcf_3}$&10.74&6.88&4.89&7.67&29.05&51.47&2246\\
+\hline
+$\vec{sbcf_4}$&12.15&7.74&7.88&14.49&49.96&19.89&2229\\
+\hline
+$\vec{sbcf_5}$&13.43&12.90&14.26&25.06&31.29&16.46&2115\\
+\hline
+$\vec{sbcf_6}$&76.85&6.87&9.73&16.40&37.63&29.34&1032\\
+\hline
+$\vec{sbcf_7}$&262.98&3.83&6.96&14.23&38.72&36.25&168\\
+\hline
+\end{tabular}}
+\label{tab:fuzzyBusinessStaticCentroids} 
+\end{table*}
+
+\begin{table*}[h]
+	\caption{Centroids from fuzzy clustering of reviewer data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.1cm}
+%\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Cluster ID&Total&*&**&***&****&*****&votes& Size\\
+\hline
+$\vec{srcf_6}$&1.46&97.77&0.40&0.36&0.57&0.88&3.79&4079\\
+\hline
+$\vec{srcf_4}$&1.52&0.34&0.24&0.26&0.39&98.75&2.20&13842\\
+\hline
+$\vec{srcf_3}$&1.71&0.33&0.44&0.75&97.72&0.74&3.13&6740\\
+\hline
+$\vec{srcf_2}$&1.83&0.76&95.69&0.79&1.36&1.37&5.82&2274\\
+\hline
+$\vec{srcf_5}$&2.12&0.76&0.91&94.47&2.09&1.74&6.40&2223\\
+\hline
+$\vec{srcf_6}$&6.14&4.23&4.41&5.89&40.15&45.30&10.70&7032\\
+\hline
+$\vec{srcf_1}$&11.09&8.99&11.82&18.24&33.88&27.04&22.64&7683\\
+\hline
+\end{tabular}}
+\label{tab:fuzzyReviewerStaticCentroids} 
+\end{table*}
+Table~\ref{tab:fuzzyBusinessStaticCentroids} shows the results of applying fuzzy clustering to the businesses in the yelp.com dataset.
+One of the major advantages of the fuzzy clustering is the fact that the businesses can belong to multiple clusters. Another interesting feature of fuzzy clustering is that the resulting centroids tend to be less extreme, better separated, and the cluster sizes are more uniformly distributed. The overall clustering profiles do match the crisp clustering and are given below:
+
+\begin{itemize}
+\item [$\vec{sbcf}_1$] {\bf Sparsely but very well rated} - Fewest number of reviews, mostly five stars.
+\item [$\vec{sbcf}_2$] {\bf Sparsely and lowly rated} - Few reviews, majority are one and two stars.
+\item [$\vec{sbcf}_3$] {\bf Well rated} - Modest number of reviews, mostly five and four stars.
+\item [$\vec{sbcf}_4$] {\bf Reasonably rated} - Modest number of reviews, mostly four and five stars.
+\item [$\vec{sbcf}_5$] {\bf Ambivalently rated} - Modest number of evenly spread reviews.
+\item [$\vec{sbcf}_6$] {\bf Reasonably rated} - Large number of reviews, mostly four and five stars with noticeable three stars.
+\item [$\vec{sbcf}_7$] {\bf Reasonably rated} - Largest number of reviews, mostly four and five stars with noticeable three stars.
+\end{itemize}
+
+Table~\ref{tab:fuzzyReviewerStaticCentroids} shows the results of fuzzy clustering applied to the information about the reviewers.
+The moderating effect of fuzzy C-means is more pronounced for the reviewer dataset. The last two crisp clusters $\vec{src_6}$ and $\vec{src_7}$
+consisted of a total of 77 reviewers with extremely high values for total reviews and votes.
+The corresponding fuzzy clusters, $\vec{srcf_6}$ and $\vec{srcf_7}$, have more moderate centroids and represent more than 14000 reviewers.
+The outlying reviewers have been essentially absorbed in the crisp cluster $\vec{src_5}$. These moderate profiles are possible because these reviewers
+can belong to multiple clusters.
+Due to the more pronounced effect of fuzzy clustering, the reviewer fuzzy profiles are somewhat different from their crisp counter-parts and can be described as:
+
+\begin{itemize}
+\item [$\vec{srcf}_1$] {\bf Infrequent and hardest} - Very few and mostly one star reviews.
+\item [$\vec{srcf}_2$]{\bf Infrequent and soft} - Very few and mostly five star reviews.
+\item [$\vec{srcf}_3$] {\bf Infrequent and very soft} - Very few and almost exclusively five star reviews.
+\item [$\vec{srcf}_4$] {\bf Infrequent and hard} - Very few and mostly two star reviews.
+\item [$\vec{srcf}_5$] {\bf Infrequent middle of the road} - Very few and mostly three star reviews.
+\item [$\vec{srcf}_6$] {\bf Frequent and somewhat soft} - Modest number of reviews and votes.
+\item [$\vec{srcf}_7$] {\bf Prolific and balanced} Large number of evenly spread reviews.
+\end{itemize}
+
+In summary, the comparison of crisp and fuzzy profiles shows that the fuzzy clustering allows objects to belong to multiple clusters. This assignment to multiple clusters leads to centroids that are less extreme and well separated. Moreover, the objects are more uniformly distributed among all the clusters.
+More details of the experiments can be found in~\cite{LingrasTriff2015}.
+
+\section{Rough clustering}
+
+Fuzzy C-means makes it possible to assign an object to multiple clusters
+with different degrees of membership.
+These memberships can be too descriptive for most users.
+Moreover, one cannot easily identify the cluster boundaries.
+The rough K-means \cite{LingrasWest2004} algorithm and its various 
+extensions \cite{Mitra2004,Peters2006} have been found to be effective in creating
+well delineated lower and upper bounds of clusters.
+A comparative study of crisp, rough and evolutionary clustering depicts how rough 
+clustering outperforms crisp clustering \cite{JoshiLingras2009}. 
+Peters, et al.~\cite{PetersEtAl2013} provide a good comparison of rough clustering
+and other conventional clustering algorithms.
+Rough set clustering has also been reformulated in the context of related theories
+such as interval set clustering formulation by Yao, et al.~\cite{yao2009interval}.
+Yu et al.~\cite{yu2014three,yu2016tree} proposed clustering of incomplete data
+based on a new and dynamic extension of rough set theory called three-way decision theory.
+This section presents an engineering application to demonstrate
+the effectiveness of rough clustering. 
+
+
+Seasonal and permanent traffic counters
+scattered across a highway network
+are the major sources of
+traffic data.
+These traffic counters measure the
+traffic volume -- the number of
+vehicles that have passed
+through a particular section
+of a lane or highway in a
+given time period.
+Traffic volumes can be
+expressed in terms of
+hourly or daily traffic.
+More sophisticated traffic
+counters record additional
+information such as the speed,
+length and weight of the vehicle.
+Highway agencies generally have
+records from traffic counters
+collected over a number of years.
+In addition to obtaining data
+from traffic counters,
+traffic engineers also conduct
+occasional surveys of road users
+to get more information.
+
+The permanent traffic counter (PTC)
+sites are grouped
+to form various road classes.
+These classes are used to develop
+guidelines for the construction,
+maintenance and upgrading
+of highway sections.
+In one commonly used system,
+roads are classified on the
+basis of trip purpose and
+trip length characteristics
+\cite{SharmaWerner}.
+Examples of resulting classes
+are commuter, business, long distance,
+and recreational highways.
+The trip purpose provides information
+about the road users,
+an important criterion in a
+variety of traffic engineering analyses.
+Trip purpose information can be
+obtained directly from the road users,
+but since all users cannot be surveyed,
+traffic engineers study various traffic
+patterns obtained from seasonal and
+permanent traffic counters and
+sample surveys of a few road users.
+
+The present study is based on a
+sample of 264 monthly traffic patterns -
+variation of monthly average
+daily traffic volume in a given year -
+recorded between 1987
+and 1991 on Alberta highways.
+The distribution of PTCs in various regions
+are determined based on the traffic flow
+through the the provincial highway networks.
+The patterns obtained from these PTCs
+represent traffic from all major regions in the
+province.
+The hypothetical classification scheme
+consisted of three classes:
+\begin{enumerate}
+\item Commuter/business,
+
+\item Long distance, and
+
+\item Recreational.
+\end{enumerate}
+
+The rough set classification scheme
+was expected to specify lower
+and upper bounds of these classes.
+
+The resulting rough set classification schemes were
+subjectively compared with the conventional
+classification scheme.
+The upper and lower approximations of the commuter/business,
+long distance, and recreational classes were also checked against
+the geography of Alberta highway networks.
+More details of the experiment can be found in~\cite{Lingras2001}.
+
+\begin{figure}
+\centerline{\includegraphics[width=28pc]{groups.pdf}}
+\caption{Monthly patterns for the lower approximations}
+\label{groups}
+\end{figure}
+
+Fig.~\ref{groups} shows the monthly patterns
+for the lower approximations of the
+three groups: commuter/business,
+long distance, and recreational.
+The average
+pattern for the lower approximation
+of the commuter/business class has the
+least variation over the year.
+The recreational class,
+conversely,
+has the most variation.
+The variation for the long distance class
+is less than the recreational, but more
+than the commuter/business class.
+Fig.~\ref{longrecr}
+shows one of the highway sections
+near counter number C013201
+that may have been
+commuter/business or long distance
+in 1985.
+It is clear that the monthly pattern for
+the highway section falls in between
+the two classes.
+The counter C013201 is located on
+Highway 13, 20 KM west of the
+Alberta-Saskatchewan border.
+It is an alternate route
+for travel from the city of Saskatoon
+and surrounding townships to
+townships surrounding the city of Edmonton.
+A similar observation can be made
+in Fig.~\ref{commlong} for
+highway section C009141
+that may have been long distance
+or recreational in 1991.
+The counter C009141 is located on
+Highway 9, 141 KM west of the
+Alberta-Saskatchewan border.
+The traffic on that particular road seems
+to have higher seasonal variation
+than a long distance road.
+Rough set representation of clusters
+enables us to identify such 
+intermediate patterns.
+
+\begin{figure}
+\centerline{\includegraphics[width=28pc]{longrecr.pdf}}
+\caption{Monthly pattern that may be
+long distance or recreational}
+\label{longrecr}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[width=28pc]{commlong.pdf}}
+\caption{Monthly pattern that may be commuter/business or long distance}
+\label{commlong}
+\end{figure}
+
+\section{Meta-clustering}
+This section describes a novel set of integrated secondary data mining approaches to clustering. The techniques presented in this paper enhance the conventional clustering techniques for hierarchical, network, and temporal data.
+
+\subsection{Hierarchical Meta-clustering} 
+In granular computing, a granule represents an object associated with a set of information. For example, a customer with certain purchasing patterns could represent an information granule. A granule can include a collection of finer granules. For example, a customer granule could include many visits, which are finer granules. A visit, in turn, can include the purchase of a number of products, which are even finer granules. This results in a hierarchy of customers-visits-products. Profiles of customers created by clustering should also include the profiles of visits that these customers make. The profiling of visits should in turn include profiles of customers. Similarly, profiles of products should be both influenced by and should influence profiles of customers and visits. We describe an iterative clustering technique that iterates back and forth through a granular hierarchy to obtain a stable set of profiles of objects at all levels of the hierarchy. This section reports experiments with a real-world dataset
+consisting of all the purchases made by customers
+from a small retail chain.
+
+The data spans three years from 2005-2007,
+consisting of 15,341 customers and 8,987 products.
+Many of the customers do not come often enough and
+buy enough products to provide meaningful iterative
+clustering.
+Similarly, a number of products are not brought frequently
+enough and not by a diverse customer population.
+Therefore, we chose to restrict our analysis to the top
+1000 customers and the top 500 products, based on their
+revenue.
+Customers were represented by the revenues, number of visits (as an indication of loyalty),
+profits, and number of products bought.
+The products were represented by the number of customers who bought
+the product, quantity sold, revenue, number of visits in which it was bought
+(as an indication of popularity), and profits.
+
+The profiles obtained from static clustering are rather straightforward and more or
+less rank both customers and products in terms of their desirability.
+There is no association between the customer and product clusters through
+this independent clustering process.
+The integrated iterative meta-clustering algorithm proposed by Lingras et al.~\cite{Lingras2013}
+allows us to simultaneously cluster through
+the customer and product granular hierarchy for this real-world retail dataset.
+For meta-clustering, a customer is represented by the static attributes described earlier and
+a dynamic part that maintains the percentage of products bought by the customer from different product clusters.
+Similarly,  a product is represented by the static attributes described earlier and
+a dynamic part that maintains the percentage of customers who bought the product from different customer clusters.
+Meta-clustering begins with static clustering of customers and products.
+The results from static clustering are used to create the dynamic parts of the representations of
+products and customers.
+The augmented representations are used to re-cluster both products and customers.
+The process is repeated until the dynamic representations converge.
+
+The meta-centroids of the customer clusters are shown in 
+Table~\ref{tab:realCustomerMetaCentroids} and
+the meta-centroids of the product clusters are shown in 
+Table~\ref{tab:realProductMetaCentroids}.
+The last column in each table shows the size of each cluster.
+
+\begin{table}[h]
+	\caption{Centroids from iterative meta-clustering of real customer data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.3cm}
+\begin{tabular}{|c|c|c|c|c||c|c|c|c|}
+\hline
+     & revenue & visits & profits &  products & $\vec{pc_1}$ & $\vec{pc_2}$ & $\vec{pc_3}$&Size\\
+
+  & \textbf{$\vec{sc_1}$}  &    \textbf{$\vec{sc_2}$}&  \textbf{$\vec{sc_3}$} &  \textbf{$\vec{sc_4}$}&    &  & & \\
+       \hline
+\textbf{$\vec{cc_1}$} &  0.48  & 0.56  & 0.81  & 0.59 & 0.77 & 0.61 & 0.66 &11\\
+  \hline
+\textbf{$\vec{cc_2}$} &  0.25 & 0.17 & 0.68 & 0.20 & 0.46 & 0.20  & 0.28 &99\\
+  \hline
+\textbf{$\vec{cc_3}$} & 0.07 & 0.05 & 0.56 & 0.07  & 0.11  & 0.08 & 0.10 &603\\
+  \hline
+\textbf{$\vec{cc_4}$}& 0.11 & 0.08 & 0.58  & 0.09  & 0.34 & 0.10  & 0.15 &287\\
+  \hline
+\end{tabular}}
+\label{tab:realCustomerMetaCentroids} 
+\end{table}
+
+
+\begin{table}[h]
+	\caption{Centroids from iterative meta-clustering of real product data }
+\centering
+\small
+{\setlength{\tabcolsep}{0.1cm}
+\begin{tabular}{|c|c|c|c|c|c||c|c|c|c|c|}
+\hline
+  & NumCustomers & Quantity &  Revenue &    Visits &   Profits & $\vec{cc_1}$  &  $\vec{cc_2}$ &  $\vec{cc_3}$ & $\vec{cc_4}$&Size\\
+
+  & \textbf{$\vec{sp_1}$}  &    \textbf{$\vec{sp_2}$}&  \textbf{$\vec{sp_3}$} &  \textbf{$\vec{sp_4}$}&  \textbf{$\vec{sp_5}$}&  & & & &\\
+       \hline
+\textbf{$\vec{pc_1}$} &  0.15  & 0.08  & 0.07  & 0.09 & 0.06  & 0.15 & 0.22 & 0.15 & 0.37 &166\\
+  \hline
+\textbf{$\vec{pc_2}$} &  0.52 & 0.46  & 0.49  & 0.54  & 0.39  & 0.55 & 0.61 & 0.48  & 0.66 &11\\
+  \hline
+\textbf{$\vec{pc_3}$} & 0.07 & 0.03  & 0.04 & 0.03  & 0.04  & 0.07  & 0.11 & 0.07  & 0.14 &323\\
+  \hline
+\end{tabular}}
+\label{tab:realProductMetaCentroids} 
+\end{table}
+
+The resulting customer profiles are now more refined as they use association with
+the profiles of the products that the customers buy. We can describe these
+enhanced profiles as follows:
+
+\begin{itemize}
+\item [$\vec{cc}_1$] Highest spending, profitable and most loyal customers who buy more or less equally from all product groups.
+\item [$\vec{cc}_2$] Moderately spending, profitable and moderately loyal customers who seem to favour the second most desirable group of products, given by $\vec{pc}_1$.
+\item [$\vec{cc}_3$] Along with $\vec{cc}_4$, these customer contribute least to the store's business. The distinguishing feature for this cluster is the fact that they buy uniformly few products from all the three clusters.
+\item [$\vec{cc}_4$] While comparable in contributions to $\vec{cc}_3$, these customers  seem to favour the second most desirable group of products, given by $\vec{pc}_1$.
+\end{itemize}
+
+The association of product information with customer clusters is inversely applicable to the product profiles,
+which are refined using the profiles of the customers who buy these products.
+These augmented product profiles can be described as:
+
+\begin{itemize}
+\item [$\vec{pc}_1$] Moderate revenue, profit and moderately popular products that are modestly preferred by all customers. There is a slightly higher preference by customers from the third ranked group of customers, in cluster $\vec{cc}_4$.
+\item [$\vec{pc}_2$] Highest revenue/profit, and most popular products that are favoured highly by customers from all the groups.
+\item [$\vec{pc}_3$] Least contributing products who seem to have similarly low patronage from customers across the spectrum.
+\end{itemize}
+
+\subsection{Network Meta-clustering}
+Interdependencies between objects can also be observed in a networked environment, where objects such as phone users are connected to other phone users. In such a case, the profile of a phone user should include the profiles of other users created by the same clustering process. These dependencies are applicable to any social network. This section presents a recursive clustering technique for such networked environment using a data set provided by Eagle~\cite{Eagle2010}.
+
+The objective of the present study is to use recursive
+clustering to converge to a set of user profiles. 
+The data set comprises of 182,208 phone calls data collected 
+from about 102 users over a period of nine months. 
+The following variables were used to represent a phone call:
+
+\begin{enumerate}
+\item
+Average duration of phone calls
+\item
+Average number of weekend/weekday
+\item
+Average number of daytime/night-time
+\item
+Average number of outgoing/incoming 
+\item
+Average number of SMS
+\item
+Average number of voice calls
+\item
+Average number of long duration calls
+\end{enumerate}
+
+The clustering results can be analyzed in two parts - static and
+dynamic. 
+The static part corresponds to the clustering analysis based
+on the static part of the data as described earlier.
+The dynamic part of a user maintains the percentage of users from each cluster that were called by this user.
+Meta-clustering begins with static clustering of users.
+The results from static clustering are used to create the dynamic parts for the users.
+The augmented representations are used to re-cluster the users.
+The process is repeated until the dynamic representations converge.
+
+\noindent
+{\bf Profile of Cluster 1:}
+These users make low number of calls, low average duration 
+calls, low weekend calls, highest day time calls, highest
+ outgoing calls, least SMS calls, highest voice calls and 
+the fewest long duration calls.
+
+\noindent
+{\bf Profile of Cluster 2:}
+This cluster is made up of phone numbers which make the highest
+number of calls, low average duration of calls, low
+weekend calls, least day time calls, low number of outgoing
+calls, moderate SMS calls and moderate number of voice calls.
+
+\noindent
+{\bf Profile of Cluster 3:}
+This cluster is made up of phone numbers that make the least 
+number of calls, low average duration of calls, low weekend 
+calls, moderate day time calls, moderate outgoing calls, 
+moderate SMS calls and high number of voice calls.
+
+\noindent
+{\bf Profile of Cluster 4:}
+This cluster is made up of phone numbers that make moderate 
+number of calls, least average duration of calls, high number
+of weekend calls, moderate day time calls, least outgoing calls, highest SMS calls, least voice calls and the least number of 
+long duration calls.
+
+\noindent
+{\bf Profile of Cluster 5:}
+This cluster is made up of phone numbers that made moderate 
+number of calls, highest average duration of calls, high weekend
+calls, low daytime calls, high outgoing calls, low SMS calls, 
+high voice calls and the highest number of long distance calls.
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|r|r|r|}
+\hline
+Cluster Number&$m_{j,1}^i$&$m_{j,2}^i$&$m_{j,3}^i$&$m_{j,4}^i$&$m_{j,5}^i$\\
+\hline
+1&0.008&0.017&0.047&0.002&0.010\\
+\hline
+2&0.005&0.010&0.022&0.000&0.005\\
+\hline
+3&0.011&0.001&0.012&0.001&0.005\\
+\hline
+4&0.023&0.008&0.011&0.000&0.009\\
+\hline
+5&0.003&0.000&0.000&0.000&0.001\\
+\hline
+\end{tabular}
+\end{center}
+\caption{The cluster centers corresponding to the dynamic part}
+\label{table:dynamicclustercenters}
+\end{table}
+
+The cluster centers for the dynamic part in the table \ref{table:dynamicclustercenters}
+show some differentiation between the 
+clusters. Each row gives us
+the cluster center for each cluster and each column gives us a dimension.
+
+Since the rows are actually cluster centers,
+each of the values in the row is the value of the cluster center along
+a particular dimension.
+If a cluster center of cluster $l$ is high with respect to a particular 
+column $k$, it means that phone numbers belonging 
+to cluster $l$ frequently communicate with the phone numbers of cluster $k$. We can
+extend this concept to mention that for cluster $l$, if the values
+along  most dimensions are high (i.e. most of the 
+values are high along the row), then cluster $l$ is a very social 
+cluster and it is in contact with most of the clusters. 
+
+The popularity  values (column wise values) are indicative of how 
+important a dimension is for the cluster centers for 
+all the clusters. As seen in the table \ref{table:dynamicclustercenters},
+ the column of cluster 2 has high values for 
+clusters 1, 2 and 4.
+However, all values along the column 1 are high. This means that cluster 1 is a very popular and important cluster for 
+all other clusters.
+
+Please note that sociability and popularity are independent of each 
+other. Hence, it is possible that a cluster $l$ is social
+with cluster $k$ but is not popular with cluster $k$.
+The results of the clustering as shown in table 
+\ref{table:dynamicclustercenters} in terms of sociability
+and popularity are summarized below.
+
+\begin{itemize}
+\item
+Cluster 1 is the most popular cluster. 
+Cluster 1 is also a very social cluster as its row-wise values are high.
+\item
+Cluster 2 is very popular among the phone numbers from the clusters
+1, 2 and 4. 
+Cluster 2 is also fairly social except with phone numbers from cluster 4.
+\item
+Cluster 3 is very popular with all the clusters except cluster 5. 
+Cluster 3 is also social with all clusters.
+\item
+Cluster 4 is the least popular cluster. Also, cluster 4 phone numbers are social 
+with all the clusters except their own cluster. These phone numbers
+indicate people who are very selective of the people they communicate
+with.
+\item
+Cluster 5 phone numbers are the least social phone numbers. They 
+socialize only with themselves and with phone numbers from cluster 1. 
+But they are popular phone numbers and all clusters communicate with 
+them.
+\end{itemize}
+
+From the above observations, we can conclude that while certain 
+phone users tend to concentrate their destination numbers to 
+a particular group of people (who fall within the same cluster 
+because of their inherent calling behavior), others are more
+diversely networked. We can also distinguish between their sociability
+and popularity characteristics which can help to build a sophisticated
+model of the social network represented by the data set. 
+
+\subsection{Temporal Meta-clustering}
+The recursive clustering developed for a networked environment is also extended to temporal databases, where profiles of daily patterns of a quantity should include profiles of previous daily patterns, and in some cases profiles of future daily patterns. For example, let us assume that we need to profile a stock based on its volatility. The volatility in a stock price today should take into account volatility of stock prices in the immediate past and immediate future. One can look at such a daily pattern as an object that is connected to the past and future daily patterns. 
+
+Volatility of financial data series is an important indicator used by traders. The fluctuation in prices creates trading opportunities.  Volatility is a measure for variation of price of a financial instrument over time. Distribution of prices during the day can provide an elaborate description of price fluctuations.
+A trader finds a daily price pattern interesting when it is volatile.
+The higher the fluctuations in prices, the
+more volatile the pattern.
+The Black Scholes index is a popular way to quantify volatility of a pattern~\cite{BlackScholes1973}.
+We can segment daily patterns based on the values of the Black Scholes
+index.
+This segmentation is essentially a clustering of one dimensional
+representation (Black Scholes index) of the daily pattern.
+Black Scholes index is a single concise index to identify volatility in
+a daily pattern.
+However, a complete distribution of prices during the day can provide
+a more elaborate information on the volatility during the day.
+While a distribution consisting of frequency of different prices
+is not a concise description for a single day,
+it can be a very useful representation of daily patterns for
+clustering based on volatility.
+Lingras and Haider~\cite{LingrasHaider2015} described how to create a rough ensemble of clustering
+using both of these representations. In this paper, we only use the daily price distribution to demonstrate
+the recursive temporal meta-clustering.
+However, the proposed approach can use either of the two representations, or even an ensemble of the two clustering methods.
+
+Following ~\cite{LingrasHaider2015}, we use five percentile values; 10\%, 25\%, 50\%, 75\% and 90\% to represent the price distribution. 10\% of the prices are below the 10th percentile value, 25\% of the prices are below the 25th percentile value and so on. Our data set contains average prices at 10 minute intervals for 223 instruments transacted on 121 days, comprising a total of 27,012 records.
+Each daily pattern has 39 intervals. This data set is used to create a five dimensional pattern, which represents 10, 25, 50, 75 and 90 percentile values of the prices. The prices are normalized by the opening price so that a commodity selling for \$100 has the same pattern as the one that is selling for \$10. Afterwards, the natural logarithms of the five percentiles are calculated.
+
+As before, the clustering results can be analyzed in two parts - static and
+dynamic. 
+The static part corresponds to the clustering analysis based
+on the static part of the data as described earlier.
+The dynamic part of a stock is the volatility cluster the stock belonged to for the previous ten days.
+Meta-clustering begins with static clustering of the stocks.
+The results from static clustering are used to create the dynamic parts for the stocks.
+The augmented representations are used to re-cluster the stocks.
+The process is repeated until the dynamic representations converge as shown in table~\ref{rankedCenters9P}.
+
+\begin{table*}[!t]
+\centering
+\caption {Final Ranked Centers for Percentile Data}
+%\resizebox{90mm}{12mm}{
+\begin{tabular}{ccccccccccccccccc}\hline
+\rotatebox{90}{Rank}&\rotatebox{90}{Cluster}&p25&p50&p75&p90&{d$_{m-9}$}&{d$_{m-8}$}&{d$_{m-7}$}&{d$_{m-6}$}&{d$_{m-5}$}&{d$_{m-4}$}&{d$_{m-3}$}&{d$_{m-2}$}&{d$_{m-1}$}&{d
+$_{m}$}\\ \hline
+1&C4&0.17&0.37&0.58&0.78&1.04&1.02&1.05&1.04&1.03&1.04&1.03&1.03&1.06&1.10\\
+2&C3&0.20&0.42&0.66&0.87&1.27&1.29&1.46&1.67&1.97&2.35&2.70&2.98&3.01&2.93\\
+3&C2&0.20&0.43&0.68&0.90&3.31&3.17&2.71&2.35&1.95&1.56&1.33&1.21&1.20&1.23\\
+4&C5&0.25&0.52&0.80&1.04&2.92&3.05&3.18&3.31&3.39&3.34&3.19&2.99&2.86&2.71\\
+5&C1&0.91&1.92&2.72&3.24&1.27&1.21&1.25&1.22&1.23&1.19&1.19&1.17&1.16&1.21\\ \hline
+\end{tabular}
+%}
+\label{rankedCenters9P}
+\end{table*}
+
+
+The static and dynamic profiles for the days of all the financial instruments (stocks)
+provide us the meta-profiles of each cluster as follows:
+
+\noindent
+{\bf Cluster C4 (Rank 1) - least volatile}
+The stocks in this cluster are not volatile today nor have they shown any volatility for last two weeks (10 trading days).
+
+\noindent
+{\bf Cluster C3 (Rank 2) - low volatility today, but volatile over last week}
+The stocks in this cluster are not volatile today. However, they were volatile last week (5 trading days). The volatility in these stocks may be subsiding and it may be relatively safer to sell them.
+
+\noindent
+{\bf Cluster C2 (Rank 3) - moderate volatility today and last week, but volatile two weeks ago}
+The stocks in this cluster are somewhat volatile today. They have not shown much volatility last week (5 trading days) either. However, they were quite active two weeks ago. The volatility in these stocks has definitely subsided and it may be better to sell them as they are unlikely to rise in the next little while.
+
+\noindent
+{\bf Cluster C5 (Rank 4) - moderate volatility today, but volatile for last two weeks}
+The stocks in this cluster are not very volatile today. However, they were volatile over the last two weeks (10 trading days). The volatility in these stocks seems to have come to a screeching halt. It may be good idea to study the news on these stocks and trade accordingly.
+
+\noindent
+{\bf Cluster C1 (Rank 5) - high volatility today, but was not volatile for last two weeks}
+The stocks in this cluster are attracting the interest of the traders. They may be in early phase of activity and potential buying opportunities.
+
+The cluster profiles described above put the volatility in a historical perspective and may allow traders to look at stocks differently, leading to a more informed decision.
+More details of the meta-clustering experiments can be found in~\cite{LingrasHaiderTriff2016}.
+
+\section{Other Extensions and Applications of Clustering}
+Clustering continues to evolve to address more practical research challenges. This section provides a brief overview of various challenges addressed by a number of researchers.
+
+\subsection{Use of Medoids and Modes as an Alternative to Centroids}
+The K-means algorithm~\cite{HartiganWong1979} continues to be the basis of many of the clustering efforts, such as fuzzy C-means and rough K-means. However, the use of centroids can sometimes be a limiting factor in the application of rough set theory. For example, the size of the search space while using Genetic Algorithms to evolve a clustering scheme can be daunting if we use centroids in a high dimensional space. In such cases, using a medoid (an object in the dataset that is closest to the centroid) can improve the computational efficiency, as shown by Joshi and Lingras~\cite{JoshiLingras2009}. The centroid used in the K-means algorithm is geared towards numerical attributes. In a number of real-world applications we need to use categorical attributes. 
+In such cases modes (values that appear most frequently in a cluster) have been used successfully~\cite{Ammar2013decremental,AmmarEtAl2013incremental}.
+
+\subsection{Dynamic and Stream Clustering in Big Data}
+All the examples discussed earlier in this paper use a static dataset. These profiles can be used for analysis. However, for real-time analysis of a changing environment, clustering algorithms need to be modified. 
+Peters et al.~\cite{PetersEtAl2012} used supermarket data to show how the changing purchasing patterns can be modeled using rough set based dynamic clustering. Such a dynamic clustering involves creation of new clusters, deletion of obsolete clusters, and merging of clusters that are becoming indistinguishable. Ammar et al.~\cite{Ammar2013decremental,AmmarEtAl2013incremental} used a variation of dynamic clustering, called incremental and decremental clustering, to adapt to the changing nature of the data using possibilistic soft clustering. The approach was shown to be useful even for standard data mining datasets. Another incremental clustering approach based on three-way decision theory was reported by Yu et al.~\cite{yu2016tree}.
+
+The problem of continuous influx of data has further intensified with the emergence of new high volume and high velocity datastreams such as Internet of Things (IoT) or wearable devices. These devices produce a large amount of continuously streaming data. In addition to the problems of emergence, obsolescence, and merging of clusters, the data stream clustering algorithms need to be able to manage clustering in a single pass, i.e. they can look at a data point only once before making a decision about its membership. Silva et al.~\cite{Silva2013data} provide a comprehensive overview of data stream clustering.
+
+A commercial application of rough set based clustering can be found in Infobright's database software, where the incoming rows are grouped into packrows labeled by statistical summaries for faster querying purposes. This is an excellent practical example of how rough clustering can be used for compressing data in real-world big data processing. Such packrows can be created in a natural order according to how rows have been loaded into the database. Infobright's software uses a more intelligent approach where the original ordering of the stream of rows is dynamically modified in order to produce packrows with better quality of their statistical summaries. This intelligent approach could be viewed as a practical implementation of rough stream clustering, because some rows drop into the outlying packrows and, as their summaries are less precise, they are accessed by more queries on average. 
+
+\newpage
+\subsection{Augmenting Other Data Mining Tasks using Clustering}
+
+Clustering can also be used to improve results of other data mining tasks such as
+prediction, classification, and association mining. 
+
+Zhang et al.~\cite{zhang2011use} found that variations in sales patterns of different
+products make it difficult to obtain
+a generic time series prediction model that fits best to an entire data
+set. They proposed time series
+clustering to analyze the data set to identify local groups of
+products that exhibit typical seasonal sales patterns, or stability in
+sales patterns for a certain period.
+For such local groups depending upon seasonality or stability, they
+recommended better inventory forecasting strategies~\cite{zhang2011use}.
+
+Joshi and Lingras~\cite{JoshiLingras2009} show how clustering can be used to identify various English alphabets -
+a task that is normally performed through classification. Researchers have also proposed semi-supervised learning methods that combine the strengths of clustering with traditional classification models.
+
+The meta-clustering of products and customers discussed earlier, and described in detail by Lingras et al.~\cite{Lingras2013}, provides a list of products that are typically bought by a group of similar customers. This information can be used to augment a product recommender system. If some of the customers are not buying products that others in their group of buying, the system can recommend purchase of these products.
+
+Clustering can also be used to reduce the number of possibilities created by optimization algorithms such as genetic algorithms. The sophisticated optimization algorithms create solutions that are vectors of real numbers. However, some of the solutions vary by an insignificantly small amount such as 2.056 in one solution could be 2.055987 in a different solution. Rounding off of results does not always work when we are considering vectors of real numbers as can be seen in Fig.~\ref{optimization}. Clustering can be used to find a smaller number of distinct vectors. For example, we could use the centroids of the four clusters in Fig.~\ref{optimization} as four distinct optimization solutions.
+
+Another interesting application of rough set in big data can be found in the attribute clustering proposal by Janusz and Slezak~\cite{janusz2014rough} to reduce high dimensional space such as gene expression datasets~\cite{slezak2007rough} into a more manageable number of dimensions for application of other data mining tasks.
+They combined attribute clustering with attribute reduction (feature selection) methods.
+The resulting clusters of attributes were derived in order to run attribute reduction algorithms on their representatives instead of the full attribute space.
+These clusters of attributes were heuristically evaluated and were found to be interchangeable in decision models.
+
+\begin{figure}
+\centerline{\includegraphics[width=28pc]{optimization.JPG}}
+\caption{Optimization solutions that can be grouped into four clusters}
+\label{optimization}
+\end{figure}
+
+It should be noted here that clustering does not replace the classical data mining techniques, but can enhance their results.
+
+\section{Summary and Conclusions}
+This paper described the role of clustering in real-world data mining and how the algorithmic and theoretical development in clustering has responded to new challenges.
+
+We looked at the use of conventional clustering for analysis of web usage on yelp.com by creating profiles of businesses and reviewers using the K-means algorithm.
+
+We then studied the fuzzy theoretic extension, called the fuzzy C-means algorithm, that provided more moderate cluster centroids and an ability for objects to belong to multiple clusters.
+
+Another soft computing extension based on rough set theory called rough K-means was used to show how clustering of highway sections can be made more meaningful with the help of lower and upper bounds.
+
+The usefulness of three types of meta-clustering techniques were demonstrated for
+\begin{itemize}
+\item creating simultaneous profiling of products and customers in a retail store
+\item introducing social relationships into the profiles of connected phone users
+\item augmenting daily volatility of financial instruments with historical volatility.
+\end{itemize}
+
+The paper also described various research efforts for improving the computational efficiency of clustering algorithms using medoids and modes instead of centroids. We also provided a brief overview of dynamic and stream clustering. Finally, the paper discussed how clustering can be used to enhance other data mining tasks such as classification, prediction, association, dimensionality reduction and optimization.
+
+%\bibliographystyle{IEEEtran}
+\bibliographystyle{splncs03}
+\bibliography{Ref}
+\end{document}
+
+
+
+
